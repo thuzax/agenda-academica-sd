@@ -1,0 +1,40 @@
+Equipe:
+Arthur Henrique Sousa Cruz
+Pedro Silveira Lopes
+
+Título: Agenda Compartilhada
+
+Justificativa e objetivo:
+        Atualmente, a maioria das pessoas têm grande quantidade de atividades para cumprir, mas muitas vezes estas não as agendam 
+    devidamente. Mesmo pessoas com o costume de agendar as atividades podem acabar não anotando alguma atividade. Pensando no 
+    contexto acadêmico, por exemplo, um aluno pode não anotar a data de uma tarefa caso não vá à primeira aula.
+        O objetivo deste projeto é implementar uma agenda que possa ser compartilhada por um grupo de pessoas. Neste grupo, uma 
+    pessoa poderá cadastrar uma atividade e, quando feito, essa atividade poderá ser vista por todos os membros. Os usuários 
+    também terão acesso às suas agendas individuais, o que facilitará o controle de suas atividades.
+
+Descrição geral:
+
+Requisitos:
+        - RF1: O usuário deve ter uma agenda pessoal onde serão mostrados todos os compromissos (incluindo os dos grupos)
+        - RF2: O usuário pode cadastrar, remover ou editar atividades pessoais
+        - RF3: Um usuário pode participar de vários grupos.
+        - RF4: O criador do grupo pode gerenciar as permissões de outros usuários, sendo estes classificados em dois grupos:
+                a) Administradores: que têm os mesmos privilégios de controle sobre o grupo para auxiliar o criador do grupo.
+                b) Usuário comum: Que têm permissão apenas de leitura e escrita no grupo, sendo que a segunda pode ser bloqueada 
+                   pelo criador do grupo ou pelos administradores.
+        - RF5: Os grupos devem ter seu calendário individual e estes podem ser vistos pelos participantes dos grupos.
+        - RF6: O usuário pode cadastrar, remover e editar atividades de um grupo caso tenha permissão para tal.
+        - RF7: Um usuário pode sair de um grupo a qualquer momento.
+        - RF8: O usuário deverá ter uma conta para acesso.
+        - RNF1: Deverá ser mantida uma cópia do calendário no cliente para o caso de não haver conexão com o servidor.
+        - RNF2: A cópia deve ser constantemente (1 vez a cada 5 minutos) atualizada.
+        - RNF3: A senha do usuário deve ser codificada.
+        - RNF4: A transmissão de dados deve ser codificada.
+        - RNF5: O servidor deve fazer balanceamento de carga.
+        - RNF6: Deverá haver réplicas do banco de dados.
+        - RNF7: A comunicação deverá ser feita via protocolo HTTP.    
+
+Desafios:
+        - Será necessário a implementação de um algoritmo para fazer o balanceamento de carga e outro para manter a consistência 
+        entre as réplicas.
+        - Será necessário o aprendizado de uma API para facilitar a comunicação HTTP
