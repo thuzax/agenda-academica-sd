@@ -1,5 +1,7 @@
 from flask import Flask, redirect, url_for, request, Response
-from Controller import Controller
+from controller.ControllerGrupo import ControllerGrupo
+from controller.ControllerUsuario import ControllerUsuario
+from controller.ControllerTarefa import ControllerTarefa
 import json
 app = Flask(__name__)
 
@@ -19,10 +21,9 @@ def adicionar():
     except KeyError:
         todo[id_item] = request.form["dados"]
         response = Response(json.dumps(todo), status=200, mimetype='application/json')
-        controller = Controller()
-        controller.adicionarGrupo()
-        controller.adicionarUsuario()
-        controller.adicionarTarefa()
+        ControllerGrupo().adicionarGrupo()
+        ControllerUsuario().adicionarUsuario()
+        ControllerTarefa().adicionarTarefa()
         print(response)
         return response
     
