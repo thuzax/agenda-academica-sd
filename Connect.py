@@ -54,24 +54,30 @@ def pingMaster():
     response =  Response(json.dumps(master_ip), status=200, mimetype='application/json')
     return response
 
+def getMasterIp():
+    for ip in ips:
+        if(ip != my_ip):
+            print(ip)
+            route_ping = "http://" + str(ip) + ":5000" + "/ping_master"
+            print(route_ping)
+            try:
+                response = requests.get(route_ping)
+                if(response.status_code == 200):
+                    return ip
+            except:
+                continue
+
+    return my_ip
+
 if __name__ == '__main__':
     with open("ip-config.txt", "r") as arquivo:
         ips = arquivo.read().strip().splitlines()
         print(ips)
-
-    for ip in ips:
-        if(ip != my_ip):
-            route_ping = "http://" + str(ip) + "/ping_master"
-            try:
-                response = requests.get(route_ping)
-                if(response.status == 200):
-                    master_ip = ip
-                else:
-                    master_ip = my_ip
-            except:
-                master_ip = my_ip
+        
+    master_ip = getMasterIp()
+    
     print(master_ip)
     print(my_ip)
     print(ips)
 
-    app.run(debug = True)
+    app.run(debug = True, host = "0.0.0.0")

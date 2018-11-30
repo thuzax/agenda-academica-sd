@@ -1,4 +1,2 @@
-connexion
 flask
-flask-restful
 mysql-connector
