@@ -22,7 +22,7 @@ def main():
     query_entrar_grupo = {}
     query_entrar_grupo["usuario_id"] = input()
     query_entrar_grupo["grupo_id"] = input()
-    query_entrar_grupo["eh_administrador"] = "true" if input() == 's' else "false"
+    query_entrar_grupo["eh_administrador"] = 1 if input() == 's' else 0
 
     route = "http://127.0.0.1:5000/"
     route_adicionar = route + "adicionar/"

@@ -1,8 +1,11 @@
+import requests
 from flask import Flask, redirect, url_for, request, Response
+
 
 from controller.GrupoController import GrupoController
 from controller.UsuarioController import UsuarioController
 from controller.TarefaController import TarefaController
+from controller.GrupoHasUsuarioController import GrupoHasUsuarioController
 
 import json
 app = Flask(__name__)
@@ -10,6 +13,10 @@ app = Flask(__name__)
 # @app.route('/')
 # def root():
 #     return json.dumps()
+
+master_ip = None
+ips = None
+my_ip = "192.168.1.4"
 
 @app.route('/adicionar/usuario',methods = ['POST'])
 def adicionarUsuario():
@@ -37,9 +44,34 @@ def adicionarTarefa():
 def entrarGrupo():
     dados = request.form
     print(dados["usuario_id"], dados["grupo_id"], dados["eh_administrador"])
-    response = Response(json.dumps(request.form), status=200, mimetype='application/json')
+    GrupoHasUsuarioController().entrarGrupo(dados["usuario_id"], dados["grupo_id"], dados["eh_administrador"])
+    response =  Response(json.dumps(request.form), status=200, mimetype='application/json')
     return response
     
 
+@app.route('/ping_master', methods = ["GET"])
+def pingMaster():
+    response =  Response(json.dumps(master_ip), status=200, mimetype='application/json')
+    return response
+
 if __name__ == '__main__':
-   app.run(debug = True)
+    with open("ip-config.txt", "r") as arquivo:
+        ips = arquivo.read().strip().splitlines()
+        print(ips)
+
+    for ip in ips:
+        if(ip != my_ip):
+            route_ping = "http://" + str(ip) + "/ping_master"
+            try:
+                response = requests.get(route_ping)
+                if(response.status == 200):
+                    master_ip = ip
+                else:
+                    master_ip = my_ip
+            except:
+                master_ip = my_ip
+    print(master_ip)
+    print(my_ip)
+    print(ips)
+
+    app.run(debug = True)

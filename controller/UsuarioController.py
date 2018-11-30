@@ -10,7 +10,6 @@ class UsuarioController:
     instancia = None
     # Singleton
     class __UsuarioController:
-        # TODO: passar o usuario por parametro
         def adicionarUsuario(self, nome, login, senha):
                 dono_usuario = DonoController().adicionaDono()
 

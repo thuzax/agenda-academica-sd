@@ -11,7 +11,6 @@ class GrupoController:
     instancia = None
     # Singleton
     class __GrupoController:
-        # TODO: passar o grupo por parametro
         def adicionarGrupo(self, nome):
             dono_grupo = DonoController().adicionaDono()
 
