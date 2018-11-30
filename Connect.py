@@ -1,5 +1,6 @@
 import socket
 import requests
+import sys
 from flask import Flask, redirect, url_for, request, Response
 
 
@@ -78,6 +79,10 @@ def getMasterIp():
     return my_ip
 
 if __name__ == '__main__':
+    if(len(sys.argv) < 2):
+        print("Deve ser passado por parametro o id do servidor")
+        return
+    id_maquina = sys.argv[1]
     my_ip = getMyIp()
     print("meu IP: ", my_ip )
     with open("ip-config.txt", "r") as arquivo:
@@ -89,5 +94,12 @@ if __name__ == '__main__':
     print("master: ",master_ip)
     print("meu ip: ",my_ip)
     print("todos: ", ips)
+
+    with open("banco-de-dados/mysqld.cnf", "r") as arquivo:
+        saida = arquivo.read()
+    
+    saida += id_maquina
+    with open("/etc/mysql/mysql.conf.d/mysqld.cnf", "w") as arquivo:
+        pass
 
     app.run(debug = True, host = "0.0.0.0")
