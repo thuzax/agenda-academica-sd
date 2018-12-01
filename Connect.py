@@ -22,38 +22,39 @@ gerenciador = Gerenciador()
 
 @app.route('/adicionar/usuario',methods = ['POST'])
 def adicionarUsuario():
-    dados = request.form
-    UsuarioController().adicionarUsuario(dados["nome"], dados["login"], dados["senha"])
-    response = Response(json.dumps(request.form), status=200, mimetype='application/json')
+    dados = request.values
+    print(dados)
+    # UsuarioController().adicionarUsuario(dados["nome"], dados["login"], dados["senha"])
+    response = Response(dados, status=200, mimetype='application/json')
     return response
         
     
 @app.route('/adicionar/grupo',methods = ['POST'])
 def adicionarGrupo():
-    dados = request.form
+    dados = request.values
     GrupoController().adicionarGrupo(dados["nome"])
-    response = Response(json.dumps(request.form), status=200, mimetype='application/json')
+    response = Response(json.dumps(request.values), status=200, mimetype='application/json')
     return response
 
 @app.route('/adicionar/tarefa',methods = ['POST'])
 def adicionarTarefa():
-    dados = request.form
+    dados = request.values
     TarefaController().adicionarTarefa(dados["data"], dados["horario"], dados["titulo"], dados["descricao"], dados["dono_id"])
-    response = Response(json.dumps(request.form), status=200, mimetype='application/json')
+    response = Response(json.dumps(request.values), status=200, mimetype='application/json')
     return response
 
 @app.route('/entrar_grupo', methods = ["POST"])
 def entrarGrupo():
-    dados = request.form
+    dados = request.values
     print(dados["usuario_id"], dados["grupo_id"], dados["eh_administrador"])
     GrupoHasUsuarioController().entrarGrupo(dados["usuario_id"], dados["grupo_id"], dados["eh_administrador"])
-    response =  Response(json.dumps(request.form), status=200, mimetype='application/json')
+    response =  Response(json.dumps(request.values), status=200, mimetype='application/json')
     return response
     
 
 @app.route('/ping_master', methods = ["GET"])
 def pingMaster():
-    response =  Response(json.dumps(master_ip), status=200, mimetype='application/json')
+    response =  Response(json.dumps(gerenciador.master_ip), status=200, mimetype='application/json')
     return response
 
 def getMyIp():
@@ -85,23 +86,23 @@ def main(gereciador):
         return
     id_maquina = sys.argv[1]
     gerenciador.my_ip = getMyIp()
-    print("meu IP: ", my_ip )
+    print("meu IP: ", gerenciador.my_ip )
     with open("ip-config.txt", "r") as arquivo:
-        ips = arquivo.read().strip().splitlines()
-    print(ips)
+        gerenciador.ips = arquivo.read().strip().splitlines()
+    print(gerenciador.ips)
         
-    master_ip = getMasterIp(gereciador.ips, gereciador.my_ip)
+    gereciador.master_ip = getMasterIp(gereciador.ips, gereciador.my_ip)
     
-    print("master: ",master_ip)
-    print("meu ip: ",my_ip)
-    print("todos: ", ips)
+    print("master: ", gereciador.master_ip)
+    print("meu ip: ", gereciador.my_ip)
+    print("todos: ", gereciador.ips)
 
-    with open("banco-de-dados/mysqld.cnf", "r") as arquivo:
-        saida = arquivo.read()
+    # with open("banco-de-dados/mysqld.cnf", "r") as arquivo:
+    #     saida = arquivo.read()
     
-    saida += id_maquina
-    with open("/etc/mysql/mysql.conf.d/mysqld.cnf", "w") as arquivo:
-        pass
+    # saida += id_maquina
+    # with open("/etc/mysql/mysql.conf.d/mysqld.cnf", "w") as arquivo:
+    #     pass
 
     app.run(debug = True, host = "0.0.0.0")
 
