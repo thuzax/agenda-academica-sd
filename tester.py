@@ -1,63 +1,109 @@
 import requests
 import json
 
-def main():
-    
+route = "http://127.0.0.1:5000/"
+route_adicionar = route + "adicionar/"
+route_adicionar_usuario = route_adicionar + "usuario"
+route_adicionar_grupo = route_adicionar + "grupo"
+route_adicionar_tarefa = route_adicionar + "tarefa"
+route_entrar_grupo = route + "entrar_grupo"
+
+
+def insereUsuario():
     query_adicionar_usuario = {}
-    query_adicionar_usuario["nome"] = input()# ("Digite o nome do usuario:")
-    query_adicionar_usuario["login"] = input()# ("Digite o login do usuario:")
-    query_adicionar_usuario["senha"] = input()# ("Digite a senha do usuario:")
+    query_adicionar_usuario["nome"] = input("Digite o nome do usuario: ")
+    query_adicionar_usuario["login"] = input("Digite o login do usuario: ")
+    query_adicionar_usuario["senha"] = input("Digite a senha do usuario: ")
+    print(query_adicionar_usuario)
 
-    query_adicionar_grupo = {}
-    query_adicionar_grupo["nome"] = input()# ("Digite o nome do grupo:")
-
-    query_adicionar_tarefa = {}
-    query_adicionar_tarefa["titulo"] = input()# ("Digite o titulo da tarefa:")
-    query_adicionar_tarefa["data"] = input()# ("Digite a data (yyyy-mm-dd) da tarefa:")
-    query_adicionar_tarefa["horario"] = input()# ("Digite o horario (hh:mm) da tarefa:")
-    query_adicionar_tarefa["horario"] += ":00"
-    query_adicionar_tarefa["descricao"] = input()# ("Digite a descricao da tarefa:")
-    query_adicionar_tarefa["dono_id"] = input()# ("Digite o id do dono da tarefa:")
-
-    query_entrar_grupo = {}
-    query_entrar_grupo["usuario_id"] = input()
-    query_entrar_grupo["grupo_id"] = input()
-    query_entrar_grupo["eh_administrador"] = 1 if input() == 's' else 0
-
-    route = "http://127.0.0.1:5000/"
-    route_adicionar = route + "adicionar/"
-    route_adicionar_usuario = route_adicionar + "usuario"
-    route_adicionar_grupo = route_adicionar + "grupo"
-    route_adicionar_tarefa = route_adicionar + "tarefa"
-    route_entrar_grupo = route + "entrar_grupo"
-    
-    result_adicionar_usuario = requests.post(route_adicionar_usuario, data = query_adicionar_usuario)
-    result_adicionar_grupo = requests.post(route_adicionar_grupo, data = query_adicionar_grupo)
-    result_adicionar_tarefa = requests.post(route_adicionar_tarefa, data = query_adicionar_tarefa)
-    result_entrar_grupo = requests.post(route_entrar_grupo, data = query_entrar_grupo)
-    
-    # routeBusca = route + "busca"
-
-    # request = requests.get(routeBusca, data = query)
+    result_adicionar_usuario = requests.post(route_adicionar_usuario, json = json.dumps(query_adicionar_usuario))
     body_usuario = result_adicionar_usuario.content
-    body_grupo = result_adicionar_grupo.content
-    body_tarefa = result_adicionar_tarefa.content
-    body_entrar_grupo = result_entrar_grupo.content
-    
-    response_dict_usuario = body_usuario.decode("utf-8")
-    response_dict_grupo = body_grupo.decode("utf-8")
-    response_dict_tarefa = body_tarefa.decode("utf-8")
-    response_dict_entrar_grupo = body_entrar_grupo.decode("utf-8")
-    
-    print("*************************************")
+    response_dict_usuario = json.loads(body_usuario.decode("utf-8"))
+
     print(response_dict_usuario)
-    print("-------------------------------------")
+
+
+def insereGrupo():
+    query_adicionar_grupo = {}
+    query_adicionar_grupo["nome"] = input("Digite o nome do grupo: ")
+    print(query_adicionar_grupo)
+
+    result_adicionar_grupo = requests.post(route_adicionar_grupo, json = json.dumps(query_adicionar_grupo))
+    body_grupo = result_adicionar_grupo.content
+    response_dict_grupo = json.loads(body_grupo.decode("utf-8"))
+    
     print(response_dict_grupo)
-    print("-------------------------------------")
+
+
+def insereTarefa():
+    query_adicionar_tarefa = {}
+    query_adicionar_tarefa["titulo"] = input("Digite o titulo da tarefa: ")
+    query_adicionar_tarefa["data"] = input("Digite a data (yyyy-mm-dd) da tarefa: ")
+    query_adicionar_tarefa["horario"] = input("Digite o horario (hh:mm) da tarefa: ")
+    query_adicionar_tarefa["horario"] += ":00"
+    query_adicionar_tarefa["descricao"] = input("Digite a descricao da tarefa: ")
+    query_adicionar_tarefa["dono_id"] = input("Digite o id do dono da tarefa: ")
+    print(query_adicionar_tarefa)
+
+    result_adicionar_tarefa = requests.post(route_adicionar_tarefa, json = json.dumps(query_adicionar_tarefa))
+    body_tarefa = result_adicionar_tarefa.content
+    response_dict_tarefa = json.loads(body_tarefa.decode("utf-8"))
+    
     print(response_dict_tarefa)
-    print("-------------------------------------")
+
+
+def entraGrupo():
+    query_entrar_grupo = {}
+    query_entrar_grupo["usuario_id"] = input("Digite id do usuario: ")
+    query_entrar_grupo["grupo_id"] = input("Digite id do grupo: ")
+    texto = "Digite 's' se for admistrador (caso contrario, digite qualquer merda): "
+    query_entrar_grupo["eh_administrador"] = 1 if input(texto) == 's' else 0
+    print(query_entrar_grupo)
+
+    result_entrar_grupo = requests.post(route_entrar_grupo, json = json.dumps(query_entrar_grupo))
+    body_entrar_grupo = result_entrar_grupo.content
+    response_dict_entrar_grupo = json.loads(body_entrar_grupo.decode("utf-8"))
+
     print(response_dict_entrar_grupo)
-    print("*************************************")
+
+
+def mostraOpcoes():
+    texto = ""
+    texto += "----------------------------------------" + "\n"
+    texto += "Escolha uma das opcoes a seguir:" + "\n"
+    texto += "1 - Insere usuario" + "\n"
+    texto += "2 - Insere grupo" + "\n"
+    texto += "3 - Insere tarefa" + "\n"
+    texto += "4 - Insere entrar grupo" + "\n"
+    texto += "0 - Sair" + "\n"
+    texto += "----------------------------------------" + "\n"
+    texto += "Opcao: "
+    return input(texto)
+
+
+def fazOpcao(x):
+    if(x == "1"):
+        insereUsuario()
+        return
+    if(x == "2"):
+        insereGrupo
+        return
+    if(x == "3"):
+        insereTarefa()
+        return
+    if(x == "4"):
+        entraGrupo()
+        return
+    print("ERRO")
+    return
+
+
+def main():
+    x = mostraOpcoes()
+    while(x != "0"):
+        fazOpcao(x)
+        x = mostraOpcoes()
+
 
 main()
 '''
@@ -73,5 +119,16 @@ nada
 12:12
 nada nada
 6
+
+'''
+
+'''
+asdasd
+adsdas
+kvspskdop
+2001-10-10
+12:12
+plaplapla
+1
 
 '''

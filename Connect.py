@@ -1,7 +1,8 @@
 import socket
 import requests
 import sys
-from flask import Flask, redirect, url_for, request, Response
+import json
+from flask import Flask, redirect, url_for, request, Response, jsonify
 
 
 from controller.GrupoController import GrupoController
@@ -22,34 +23,41 @@ gerenciador = Gerenciador()
 
 @app.route('/adicionar/usuario',methods = ['POST'])
 def adicionarUsuario():
-    dados = request.form
+    dados = json.loads(request.json)
     UsuarioController().adicionarUsuario(dados["nome"], dados["login"], dados["senha"])
-    response = Response(json.dumps(request.form), status=200, mimetype='application/json')
+    response = Response(request.json, status=200, mimetype='application/json')
     return response
         
     
 @app.route('/adicionar/grupo',methods = ['POST'])
 def adicionarGrupo():
-    dados = request.form
+    dados = json.loads(request.json)
     GrupoController().adicionarGrupo(dados["nome"])
-    response = Response(json.dumps(request.form), status=200, mimetype='application/json')
+    response = Response(request.json, status=200, mimetype='application/json')
     return response
 
 @app.route('/adicionar/tarefa',methods = ['POST'])
 def adicionarTarefa():
-    dados = request.form
+    print(request.json)
+    dados = json.loads(request.json)
     TarefaController().adicionarTarefa(dados["data"], dados["horario"], dados["titulo"], dados["descricao"], dados["dono_id"])
-    response = Response(json.dumps(request.form), status=200, mimetype='application/json')
+    response = Response(request.json, status=200, mimetype='application/json')
     return response
 
 @app.route('/entrar_grupo', methods = ["POST"])
 def entrarGrupo():
-    dados = request.form
+    dados = json.loads(request.json)
     print(dados["usuario_id"], dados["grupo_id"], dados["eh_administrador"])
     GrupoHasUsuarioController().entrarGrupo(dados["usuario_id"], dados["grupo_id"], dados["eh_administrador"])
-    response =  Response(json.dumps(request.form), status=200, mimetype='application/json')
+    response =  Response(request.json, status=200, mimetype='application/json')
     return response
     
+
+@app.route('/busca_tarefa_dono', methods = ["GET"])
+def buscaTarefaDono():
+    pass
+
+
 
 @app.route('/ping_master', methods = ["GET"])
 def pingMaster():
@@ -71,7 +79,7 @@ def getMasterIp(ips, my_ip):
             route_ping = "http://" + str(ip) + ":5000" + "/ping_master"
             print(route_ping)
             try:
-                response = requests.get(route_ping)
+                response = requests.get(route_ping, timeout = 1)
                 if(response.status_code == 200):
                     return ip
             except:
@@ -85,16 +93,18 @@ def main(gereciador):
         return
     id_maquina = sys.argv[1]
     gerenciador.my_ip = getMyIp()
-    print("meu IP: ", my_ip )
+    print("meu IP: ", gerenciador.my_ip)
     with open("ip-config.txt", "r") as arquivo:
         ips = arquivo.read().strip().splitlines()
     print(ips)
-        
+    
+    gerenciador.ips = ips
+
     master_ip = getMasterIp(gereciador.ips, gereciador.my_ip)
     
-    print("master: ",master_ip)
-    print("meu ip: ",my_ip)
-    print("todos: ", ips)
+    print("master: ", gerenciador.master_ip)
+    print("meu ip: ", gerenciador.my_ip)
+    print("todos: ", gerenciador.ips)
 
     with open("banco-de-dados/mysqld.cnf", "r") as arquivo:
         saida = arquivo.read()
