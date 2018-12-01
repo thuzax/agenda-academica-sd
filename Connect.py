@@ -9,6 +9,8 @@ from controller.UsuarioController import UsuarioController
 from controller.TarefaController import TarefaController
 from controller.GrupoHasUsuarioController import GrupoHasUsuarioController
 
+from Gerenciador import Gerenciador
+
 import json
 app = Flask(__name__)
 
@@ -16,9 +18,7 @@ app = Flask(__name__)
 # def root():
 #     return json.dumps()
 
-master_ip = None
-ips = None
-my_ip = ""
+gerenciador = Gerenciador()
 
 @app.route('/adicionar/usuario',methods = ['POST'])
 def adicionarUsuario():
@@ -63,7 +63,8 @@ def getMyIp():
     s.close()
     return ip
 
-def getMasterIp():
+def getMasterIp(ips, my_ip):
+    print(ips)
     for ip in ips:
         if(ip != my_ip):
             print(ip)
@@ -78,18 +79,18 @@ def getMasterIp():
 
     return my_ip
 
-if __name__ == '__main__':
+def main(gereciador):
     if(len(sys.argv) < 2):
         print("Deve ser passado por parametro o id do servidor")
         return
     id_maquina = sys.argv[1]
-    my_ip = getMyIp()
+    gerenciador.my_ip = getMyIp()
     print("meu IP: ", my_ip )
     with open("ip-config.txt", "r") as arquivo:
         ips = arquivo.read().strip().splitlines()
-        print(ips)
+    print(ips)
         
-    master_ip = getMasterIp()
+    master_ip = getMasterIp(gereciador.ips, gereciador.my_ip)
     
     print("master: ",master_ip)
     print("meu ip: ",my_ip)
@@ -103,3 +104,5 @@ if __name__ == '__main__':
         pass
 
     app.run(debug = True, host = "0.0.0.0")
+
+main(gerenciador)
