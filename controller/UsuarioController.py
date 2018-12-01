@@ -15,6 +15,12 @@ class UsuarioController:
 
                 usuario = Usuario(dono_usuario.getId(), nome, login, senha)
                 UsuarioDAO().adicionarUsuario(usuario)
+                
+                return usuario.getId()
+
+        def login(self, login, senha):
+            usuario_id = UsuarioDAO().login(login, senha)
+            return usuario_id
 
 
 

@@ -2,14 +2,19 @@ import requests
 import json
 
 route = "http://127.0.0.1:5000/"
+
 route_adicionar = route + "adicionar/"
 route_adicionar_usuario = route_adicionar + "usuario"
 route_adicionar_grupo = route_adicionar + "grupo"
 route_adicionar_tarefa = route_adicionar + "tarefa"
+
 route_entrar_grupo = route + "entrar_grupo"
+
 route_busca = route + "buscar/"
 route_busca_tarefas_dono = route_busca + "tarefas_dono"
 route_busca_grupos = route_busca + "grupos"
+
+route_login = route + "login"
 
 
 def insereUsuario():
@@ -102,7 +107,7 @@ def login():
     query_login["senha"] = input(texto)
     print(query_login)
 
-    result_login = requests.get(route_login, json = json.dumps(query_login))
+    result_login = requests.post(route_login, json = json.dumps(query_login))
     body_login = result_login.content
     response_dict_login = json.loads(body_login.decode("utf-8"))
 

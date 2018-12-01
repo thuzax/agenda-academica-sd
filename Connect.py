@@ -26,8 +26,8 @@ def adicionarUsuario():
     dados = request.get_json()
     json_acceptable_string = dados.replace("'", "\"")
     dados = json.loads(json_acceptable_string)
-    UsuarioController().adicionarUsuario(dados["nome"], dados["login"], dados["senha"])
-    response = Response(json.dumps(dados), status=200, mimetype='application/json')
+    usuario_id = UsuarioController().adicionarUsuario(dados["nome"], dados["login"], dados["senha"])
+    response = Response(json.dumps({"usuario_id" : usuario_id}), status=200, mimetype='application/json')
     return response
         
     
@@ -81,7 +81,12 @@ def buscarGrupos():
 
 @app.route('/login', methods = ["POST"])
 def login():
-    pass
+    dados = request.get_json()
+    json_acceptable_string = dados.replace("'", "\"")
+    dados = json.loads(json_acceptable_string)
+    usuario_id = UsuarioController().login(dados["login"], dados["senha"])
+    response = Response(json.dumps({"usuario_id" : usuario_id}), status=200, mimetype='application/json')
+    return response
 
 
 
