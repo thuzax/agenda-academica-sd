@@ -7,7 +7,9 @@ route_adicionar_usuario = route_adicionar + "usuario"
 route_adicionar_grupo = route_adicionar + "grupo"
 route_adicionar_tarefa = route_adicionar + "tarefa"
 route_entrar_grupo = route + "entrar_grupo"
-route_busca_tarefas_dono = route + "busca_tarefas_dono"
+route_busca = route + "buscar/"
+route_busca_tarefas_dono = route_busca + "tarefas_dono"
+route_busca_grupos = route_busca + "grupos"
 
 
 def insereUsuario():
@@ -78,6 +80,20 @@ def buscaTarefasPorId():
 
     print(response_dict_busca_tarefas_dono)
 
+def buscaGrupos():
+    query_busca_grupos = {}
+    texto = "Digite o id do grupo (por padrao busca todos os grupo): "
+    query_busca_grupos["grupo_id"] = input(texto)
+    texto = "Digite o id do usuario que esta buscando (por padrao nao checa se participa ou se e adm): "
+    query_busca_grupos["usuario_id"] = input(texto)
+    print(query_busca_grupos)
+
+    result_busca_grupos = requests.get(route_busca_grupos, json = json.dumps(query_busca_grupos))
+    body_busca_grupos = result_busca_grupos.content
+    response_dict_busca_grupos = json.loads(body_busca_grupos.decode("utf-8"))
+
+    print(response_dict_busca_grupos)
+
 def mostraOpcoes():
     texto = ""
     texto += "----------------------------------------" + "\n"
@@ -87,6 +103,7 @@ def mostraOpcoes():
     texto += "3 - Insere tarefa" + "\n"
     texto += "4 - Insere entrar grupo" + "\n"
     texto += "5 - Busca tarefas usando ID do dono" + "\n"
+    texto += "6 - Busca grupos (inclui informacao de participacao e se e adm)" + "\n"
     texto += "0 - Sair" + "\n"
     texto += "----------------------------------------" + "\n"
     texto += "Opcao: "
@@ -108,6 +125,9 @@ def fazOpcao(x):
         return
     if(x == "5"):
         buscaTarefasPorId()
+        return
+    if(x == "6"):
+        buscaGrupos()
         return
     print("ERRO")
     return

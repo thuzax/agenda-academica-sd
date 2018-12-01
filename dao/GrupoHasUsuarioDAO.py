@@ -24,6 +24,25 @@ class GrupoHasUsuarioDAO:
 
             print("------------------------------------------")
 
+        def buscaRelacao(self, usuario_id, grupo_id):
+            conexao = mysql.connector.connect(user = "thuza", password = "agenda", host = "127.0.0.1", database = "agenda-academica")
+            cursor = conexao.cursor()
+
+            busca_relacao = ("SELECT * FROM Grupo_has_Usuario ghu "
+                             "WHERE ghu.usuario_id = '" + str(usuario_id) + "' AND ghu.grupo_id = '" + str(grupo_id) + "'"
+                             ";")
+
+            print(busca_relacao)
+
+            cursor.execute(busca_relacao)
+            relacoes = cursor.fetchall()
+
+            conexao.commit()
+            cursor.close()
+            conexao.close()
+
+            return relacoes
+
     # Singleton
     def __init__(self):
         if(self.instancia == None):

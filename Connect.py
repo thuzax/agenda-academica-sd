@@ -53,16 +53,19 @@ def entrarGrupo():
     return response
     
 
-@app.route('/busca_tarefas_dono', methods = ["GET"])
+@app.route('/buscar/tarefas_dono', methods = ["GET"])
 def buscaTarefaDono():
     dados = json.loads(request.json)
     tarefas = TarefaController().buscaTarefasDono(dados["dono_id"])
-    print("**********************")
-    print()
-    print("**********************")
     response =  Response(json.dumps(tarefas), status=200, mimetype='application/json')
     return response
 
+@app.route('/buscar/grupos', methods = ["GET"])
+def buscarGrupos():
+    dados = json.loads(request.json)
+    grupos = GrupoController().buscarGrupos(dados["grupo_id"], dados["usuario_id"])
+    response =  Response(json.dumps(grupos), status=200, mimetype='application/json')
+    return response
 
 
 

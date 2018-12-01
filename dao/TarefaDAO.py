@@ -42,16 +42,9 @@ class TarefaDAO:
             cursor.close()
             conexao.close()
             
-            list_tarefas = []
-            for item in tarefas:
-                list_tarefas.append({})
-                list_tarefas[-1]["id"] = item[0]
-                list_tarefas[-1]["data"] = item[1]
-                list_tarefas[-1]["horario"] = item[2]
-                list_tarefas[-1]["titulo"] = item[3]
-                list_tarefas[-1]["descricao"] = item[4]
-                list_tarefas[-1]["dono_id"] = item[5]
-            return list_tarefas
+            return tarefas
+
+        
 
     # Singleton
     def __init__(self):

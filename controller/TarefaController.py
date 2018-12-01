@@ -14,7 +14,18 @@ class TarefaController:
             TarefaDAO().adicionarTarefa(tarefa)
             
         def buscaTarefasDono(self, dono_id):
-            list_tarefas = TarefaDAO().buscaTarefasDono(dono_id)
+            tarefas = TarefaDAO().buscaTarefasDono(dono_id)
+            
+            list_tarefas = []
+            for item in tarefas:
+                list_tarefas.append({})
+                list_tarefas[-1]["id"] = item[0]
+                list_tarefas[-1]["data"] = item[1]
+                list_tarefas[-1]["horario"] = item[2]
+                list_tarefas[-1]["titulo"] = item[3]
+                list_tarefas[-1]["descricao"] = item[4]
+                list_tarefas[-1]["dono_id"] = item[5]
+            
             return list_tarefas
             
         

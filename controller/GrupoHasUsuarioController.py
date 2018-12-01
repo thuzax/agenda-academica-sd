@@ -12,6 +12,24 @@ class GrupoHasUsuarioController:
                 GrupoHasUsuarioDAO().entrarGrupo(grupo_has_usuario)
 
 
+        def participaGrupo(self, usuario_id, grupo_id):
+            print(usuario_id, grupo_id)
+            relacoes = GrupoHasUsuarioDAO().buscaRelacao(usuario_id, grupo_id)
+            print(relacoes)
+            if(len(relacoes) > 0):
+                return True
+            return False
+
+        def ehAdministrador(self, usuario_id, grupo_id):
+            print(usuario_id, grupo_id)
+            relacoes = GrupoHasUsuarioDAO().buscaRelacao(usuario_id, grupo_id)
+            print(relacoes)
+            if(len(relacoes) > 0):
+                relacao = relacoes[0];
+                return (True if relacao[0] == 1 else False)
+            return False
+
+
 
     def __init__(self):
         if(self.instancia == None):
