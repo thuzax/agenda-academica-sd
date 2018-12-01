@@ -13,6 +13,11 @@ class TarefaController:
 
             TarefaDAO().adicionarTarefa(tarefa)
             
+        def buscaTarefasDono(self, dono_id):
+            list_tarefas = TarefaDAO().buscaTarefasDono(dono_id)
+            return list_tarefas
+            
+        
     def __init__(self):
         if(self.instancia == None):
             self.instancia = self.__TarefaController()

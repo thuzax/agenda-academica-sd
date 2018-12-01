@@ -53,9 +53,19 @@ def entrarGrupo():
     return response
     
 
-@app.route('/busca_tarefa_dono', methods = ["GET"])
+@app.route('/busca_tarefas_dono', methods = ["GET"])
 def buscaTarefaDono():
-    pass
+    dados = json.loads(request.json)
+    tarefas = TarefaController().buscaTarefasDono(dados["dono_id"])
+    print("**********************")
+    print()
+    print("**********************")
+    response =  Response(json.dumps(tarefas), status=200, mimetype='application/json')
+    return response
+
+
+
+
 
 
 
@@ -100,7 +110,7 @@ def main(gereciador):
     
     gerenciador.ips = ips
 
-    master_ip = getMasterIp(gereciador.ips, gereciador.my_ip)
+    gerenciador.master_ip = getMasterIp(gereciador.ips, gereciador.my_ip)
     
     print("master: ", gerenciador.master_ip)
     print("meu ip: ", gerenciador.my_ip)

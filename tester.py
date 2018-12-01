@@ -7,6 +7,7 @@ route_adicionar_usuario = route_adicionar + "usuario"
 route_adicionar_grupo = route_adicionar + "grupo"
 route_adicionar_tarefa = route_adicionar + "tarefa"
 route_entrar_grupo = route + "entrar_grupo"
+route_busca_tarefas_dono = route + "busca_tarefas_dono"
 
 
 def insereUsuario():
@@ -66,6 +67,16 @@ def entraGrupo():
 
     print(response_dict_entrar_grupo)
 
+def buscaTarefasPorId():
+    query_busca_tarefas_dono = {}
+    query_busca_tarefas_dono["dono_id"] = input("Digite o id do dono das tarefas: ")
+    print(query_busca_tarefas_dono)
+
+    result_busca_tarefas_dono = requests.get(route_busca_tarefas_dono, json = json.dumps(query_busca_tarefas_dono))
+    body_busca_tarefas_dono = result_busca_tarefas_dono.content
+    response_dict_busca_tarefas_dono = json.loads(body_busca_tarefas_dono.decode("utf-8"))
+
+    print(response_dict_busca_tarefas_dono)
 
 def mostraOpcoes():
     texto = ""
@@ -75,6 +86,7 @@ def mostraOpcoes():
     texto += "2 - Insere grupo" + "\n"
     texto += "3 - Insere tarefa" + "\n"
     texto += "4 - Insere entrar grupo" + "\n"
+    texto += "5 - Busca tarefas usando ID do dono" + "\n"
     texto += "0 - Sair" + "\n"
     texto += "----------------------------------------" + "\n"
     texto += "Opcao: "
@@ -86,13 +98,16 @@ def fazOpcao(x):
         insereUsuario()
         return
     if(x == "2"):
-        insereGrupo
+        insereGrupo()
         return
     if(x == "3"):
         insereTarefa()
         return
     if(x == "4"):
         entraGrupo()
+        return
+    if(x == "5"):
+        buscaTarefasPorId()
         return
     print("ERRO")
     return
