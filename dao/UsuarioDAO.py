@@ -33,13 +33,13 @@ class UsuarioDAO:
             print(login_usuario)
             
             cursor.execute(login_usuario)
-            usuario_id = cursor.fetchall()[0][-1]
+            usuario_id = cursor.fetchall()
             print(usuario_id)
             
             conexao.commit()
             cursor.close()
             conexao.close()
-            
+
             return usuario_id
 
     # Singleton

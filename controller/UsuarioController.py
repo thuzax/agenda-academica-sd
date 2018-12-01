@@ -20,6 +20,10 @@ class UsuarioController:
 
         def login(self, login, senha):
             usuario_id = UsuarioDAO().login(login, senha)
+            if(len(usuario_id) > 0):
+                usuario_id = usuario_id[0][-1]
+            else:
+                usuario_id = -1
             return usuario_id
 
 
