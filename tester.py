@@ -94,6 +94,20 @@ def buscaGrupos():
 
     print(response_dict_busca_grupos)
 
+def login():
+    query_login = {}
+    texto = "Digite o login: "
+    query_login["login"] = input(texto)
+    texto = "Digite a senha: "
+    query_login["senha"] = input(texto)
+    print(query_login)
+
+    result_login = requests.get(route_login, json = json.dumps(query_login))
+    body_login = result_login.content
+    response_dict_login = json.loads(body_login.decode("utf-8"))
+
+    print(response_dict_login)
+
 def mostraOpcoes():
     texto = ""
     texto += "----------------------------------------" + "\n"
@@ -104,10 +118,13 @@ def mostraOpcoes():
     texto += "4 - Insere entrar grupo" + "\n"
     texto += "5 - Busca tarefas usando ID do dono" + "\n"
     texto += "6 - Busca grupos (inclui informacao de participacao e se e adm)" + "\n"
+    texto += "7 - Fazer Login" + "\n"
     texto += "0 - Sair" + "\n"
     texto += "----------------------------------------" + "\n"
     texto += "Opcao: "
     return input(texto)
+
+    
 
 
 def fazOpcao(x):
@@ -128,6 +145,9 @@ def fazOpcao(x):
         return
     if(x == "6"):
         buscaGrupos()
+        return
+    if(x == "7"):
+        login()
         return
     print("ERRO")
     return

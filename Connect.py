@@ -23,51 +23,65 @@ gerenciador = Gerenciador()
 
 @app.route('/adicionar/usuario',methods = ['POST'])
 def adicionarUsuario():
-    dados = json.loads(request.json)
+    dados = request.get_json()
+    json_acceptable_string = dados.replace("'", "\"")
+    dados = json.loads(json_acceptable_string)
     UsuarioController().adicionarUsuario(dados["nome"], dados["login"], dados["senha"])
-    response = Response(request.json, status=200, mimetype='application/json')
+    response = Response(json.dumps(dados), status=200, mimetype='application/json')
     return response
         
     
 @app.route('/adicionar/grupo',methods = ['POST'])
 def adicionarGrupo():
-    dados = json.loads(request.json)
+    dados = request.get_json()
+    json_acceptable_string = dados.replace("'", "\"")
+    dados = json.loads(json_acceptable_string)
     GrupoController().adicionarGrupo(dados["nome"])
-    response = Response(request.json, status=200, mimetype='application/json')
+    response = Response(json.dumps(dados), status=200, mimetype='application/json')
     return response
 
 @app.route('/adicionar/tarefa',methods = ['POST'])
 def adicionarTarefa():
-    print(request.json)
-    dados = json.loads(request.json)
+    dados = request.get_json()
+    json_acceptable_string = dados.replace("'", "\"")
+    dados = json.loads(json_acceptable_string)
     TarefaController().adicionarTarefa(dados["data"], dados["horario"], dados["titulo"], dados["descricao"], dados["dono_id"])
-    response = Response(request.json, status=200, mimetype='application/json')
+    response = Response(json.dumps(dados), status=200, mimetype='application/json')
     return response
 
 @app.route('/entrar_grupo', methods = ["POST"])
 def entrarGrupo():
-    dados = json.loads(request.json)
+    dados = request.get_json()
+    json_acceptable_string = dados.replace("'", "\"")
+    dados = json.loads(json_acceptable_string)
     print(dados["usuario_id"], dados["grupo_id"], dados["eh_administrador"])
     GrupoHasUsuarioController().entrarGrupo(dados["usuario_id"], dados["grupo_id"], dados["eh_administrador"])
-    response =  Response(request.json, status=200, mimetype='application/json')
+    response =  Response(json.dumps(dados), status=200, mimetype='application/json')
     return response
     
 
 @app.route('/buscar/tarefas_dono', methods = ["GET"])
 def buscaTarefaDono():
-    dados = json.loads(request.json)
+    print("EU")
+    dados = request.get_json()
+    json_acceptable_string = dados.replace("'", "\"")
+    dados = json.loads(json_acceptable_string)
     tarefas = TarefaController().buscaTarefasDono(dados["dono_id"])
     response =  Response(json.dumps(tarefas), status=200, mimetype='application/json')
     return response
 
 @app.route('/buscar/grupos', methods = ["GET"])
 def buscarGrupos():
-    dados = json.loads(request.json)
+    dados = request.get_json()
+    json_acceptable_string = dados.replace("'", "\"")
+    dados = json.loads(json_acceptable_string)
     grupos = GrupoController().buscarGrupos(dados["grupo_id"], dados["usuario_id"])
     response =  Response(json.dumps(grupos), status=200, mimetype='application/json')
     return response
 
-
+@app.route('/login', methods = ["POST"])
+def login():
+    pass
 
 
 
