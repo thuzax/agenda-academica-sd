@@ -12,7 +12,9 @@ class TarefaController:
         def adicionarTarefa(self, data, horario, titulo, descricao, dono_id):
             tarefa = Tarefa(data, horario, titulo, descricao, dono_id)
 
-            TarefaDAO().adicionarTarefa(tarefa)
+            tarefa = TarefaDAO().adicionarTarefa(tarefa)
+            return tarefa.getId()
+            
             
         def buscarTarefasDono(self, dono_id):
             tarefas = TarefaDAO().buscarTarefasDono(dono_id)

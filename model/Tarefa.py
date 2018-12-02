@@ -7,6 +7,9 @@ class Tarefa:
         self.titulo = titulo
         self.descricao = descricao
     
+    def setId(self, t_id):
+        self.id = t_id
+
     def getId(self):
         return self.id
 

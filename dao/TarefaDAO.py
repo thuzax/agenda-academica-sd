@@ -17,10 +17,13 @@ class TarefaDAO:
 
             cursor.execute(insere_tarefa)
             conexao.commit()
+            tarefa.setId(cursor.lastrowid)
+
             cursor.close()
             conexao.close()
 
             print("--------------------------------")
+            return tarefa
 
         def buscarTarefasDono(self, dono_id):
             conexao = mysql.connector.connect(user = "thuza", password = "agenda", host = "127.0.0.1", database = "agenda-academica")

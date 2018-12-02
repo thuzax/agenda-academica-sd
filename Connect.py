@@ -4,6 +4,7 @@ import sys
 import json
 import os
 from flask import Flask, redirect, url_for, request, Response, jsonify
+import mysql.connector
 
 
 from controller.GrupoController import GrupoController
@@ -40,7 +41,8 @@ def adicionarGrupo():
 @app.route('/adicionar/tarefa',methods = ['POST'])
 def adicionarTarefa():
     dados = getJsonFromRequest(request)
-    TarefaController().adicionarTarefa(dados["data"], dados["horario"], dados["titulo"], dados["descricao"], dados["dono_id"])
+    t_id = TarefaController().adicionarTarefa(dados["data"], dados["horario"], dados["titulo"], dados["descricao"], dados["dono_id"])
+    dados["id"] = t_id
     response = Response(json.dumps(dados), status=200, mimetype='application/json')
     return response
 
@@ -147,6 +149,17 @@ def getMasterIp(ips, my_ip):
 
     return my_ip
 
+
+def createMySQLConnection(gerenciador):
+    conexao = mysql.connector.connect(user = "thuza", password = "agenda", host = "127.0.0.1", database = "agenda-academica")
+    cursor = conexao.cursor()
+    cursor.execute("show master status;")
+    print(cursor.fetchall())
+    conexao.commit()
+    cursor.close()
+    conexao.close()
+    
+
 def main(gereciador):
     if(len(sys.argv) < 2):
         print("Deve ser passado por parametro o id do servidor")
@@ -211,6 +224,9 @@ def main(gereciador):
 
     os.system("sudo service mysql restart ")
 
+    createMySQLConnection(gerenciador)
+
     app.run(debug = True, host = "0.0.0.0")
+
 
 main(gerenciador)
