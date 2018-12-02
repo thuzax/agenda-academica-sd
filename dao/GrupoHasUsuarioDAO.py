@@ -60,6 +60,25 @@ class GrupoHasUsuarioDAO:
             cursor.close()
             conexao.close()
 
+        def buscarGruposParticipante(self, usuario_id):
+            conexao = mysql.connector.connect(user = "thuza", password = "agenda", host = "127.0.0.1", database = "agenda-academica")
+            cursor = conexao.cursor()
+
+            busca_grupos = ("SELECT * FROM Grupo_has_Usuario ghu "
+                             "WHERE ghu.usuario_id = '" + str(usuario_id) + "'"
+                             ";")
+
+            print(busca_grupos)
+
+            cursor.execute(busca_grupos)
+            grupos = cursor.fetchall()
+
+            conexao.commit()
+            cursor.close()
+            conexao.close()
+
+            return grupos
+
     # Singleton
     def __init__(self):
         if(self.instancia == None):

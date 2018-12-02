@@ -70,7 +70,7 @@ def buscaTarefaDono():
     response =  Response(json.dumps(tarefas), status=200, mimetype='application/json')
     return response
 
-@app.route('/buscar/grupos', methods = ["GET"])
+@app.route('/buscar/grupos/id_ou_user', methods = ["GET"])
 def buscarGrupos():
     dados = request.get_json()
     json_acceptable_string = dados.replace("'", "\"")
@@ -99,7 +99,15 @@ def sairGrupo():
     return response
 
 
-
+@app.route('/buscar/grupos/participante', methods = ["GET"])
+def buscarGruposParticipante():
+    dados = request.get_json()
+    json_acceptable_string = dados.replace("'", "\"")
+    dados = json.loads(json_acceptable_string)
+    print(dados)
+    grupos_participante = GrupoHasUsuarioController().buscarGruposParticipante(dados["usuario_id"])
+    response = Response(json.dumps(grupos_participante), status=200, mimetype='application/json')
+    return response
 
 @app.route('/ping_master', methods = ["GET"])
 def pingMaster():

@@ -12,9 +12,11 @@ route_entrar_grupo = route + "entrar_grupo"
 route_sair_grupo = route + "sair_grupo"
 
 
-route_busca = route + "buscar/"
-route_busca_tarefas_dono = route_busca + "tarefas_dono"
-route_busca_grupos = route_busca + "grupos"
+route_buscar = route + "buscar/"
+route_buscar_tarefas_dono = route_buscar + "tarefas_dono"
+route_buscar_grupos = route_buscar + "grupos/"
+route_buscar_grupos_id_ou_user = route_buscar_grupos + "id_ou_user"
+route_buscar_grupos_participante = route_buscar_grupos + "participante"
 
 route_login = route + "login"
 
@@ -81,7 +83,7 @@ def buscaTarefasPorId():
     query_busca_tarefas_dono["dono_id"] = input("Digite o id do dono das tarefas: ")
     print(query_busca_tarefas_dono)
 
-    result_busca_tarefas_dono = requests.get(route_busca_tarefas_dono, json = json.dumps(query_busca_tarefas_dono))
+    result_busca_tarefas_dono = requests.get(route_buscar_tarefas_dono, json = json.dumps(query_busca_tarefas_dono))
     body_busca_tarefas_dono = result_busca_tarefas_dono.content
     response_dict_busca_tarefas_dono = json.loads(body_busca_tarefas_dono.decode("utf-8"))
 
@@ -95,11 +97,24 @@ def buscaGrupos():
     query_busca_grupos["usuario_id"] = input(texto)
     print(query_busca_grupos)
 
-    result_busca_grupos = requests.get(route_busca_grupos, json = json.dumps(query_busca_grupos))
+    result_busca_grupos = requests.get(route_buscar_grupos_id_ou_user, json = json.dumps(query_busca_grupos))
     body_busca_grupos = result_busca_grupos.content
     response_dict_busca_grupos = json.loads(body_busca_grupos.decode("utf-8"))
 
     print(response_dict_busca_grupos)
+
+def buscaGruposParticipante():
+    query_busca_grupos_participante = {}
+    texto = "Digite o id do usuario: "
+    query_busca_grupos_participante["usuario_id"] = input(texto)
+    print(query_busca_grupos_participante)
+
+    result_busca_grupos_participante = requests.get(route_buscar_grupos_participante, json = json.dumps(query_busca_grupos_participante))
+    body_busca_grupos_participante = result_busca_grupos_participante.content
+    response_dict_busca_grupos_participante = json.loads(body_busca_grupos_participante.decode("utf-8"))
+
+    print(response_dict_busca_grupos_participante)
+
 
 def login():
     query_login = {}
@@ -139,8 +154,9 @@ def mostraOpcoes():
     texto += "4 - Entrar grupo" + "\n"
     texto += "5 - Busca tarefas usando ID do dono" + "\n"
     texto += "6 - Busca grupos (inclui informacao de participacao e se e adm)" + "\n"
-    texto += "7 - Fazer Login" + "\n"
-    texto += "8 - Sair Grupo" + "\n"
+    texto += "7 - Fazer login" + "\n"
+    texto += "8 - Sair grupo" + "\n"
+    texto += "9 - Buscar Grupos que usuario participa" + "\n"
     texto += "0 - Sair" + "\n"
     texto += "----------------------------------------" + "\n"
     texto += "Opcao: "
@@ -173,6 +189,9 @@ def fazOpcao(x):
         return
     if(x == "8"):
         sairGrupo()
+        return
+    if(x == "9"):
+        buscaGruposParticipante()
         return
     print("ERRO")
     return
