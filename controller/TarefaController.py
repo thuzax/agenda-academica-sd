@@ -33,8 +33,18 @@ class TarefaController:
 
             return tarefas
 
+        def buscarTodasTarefasDono(self, dono_id):
+            grupos_participante = GrupoHasUsuarioDAO().buscarGruposParticipante(dono_id)
+            
+            tarefas_dono = TarefaDAO().buscarTarefasDono(dono_id)
+            for grupo_participante in grupos_participante:
+                tarefas_grupo = TarefaDAO().buscarTarefasDono(grupo_participante["grupo_id"])
+                tarefas_dono += tarefas_grupo
 
-        
+            return tarefas_dono
+    
+
+
     def __init__(self):
         if(self.instancia == None):
             self.instancia = self.__TarefaController()

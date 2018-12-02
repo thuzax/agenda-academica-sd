@@ -37,12 +37,15 @@ class GrupoHasUsuarioController:
         def buscarGruposParticipante(self, usuario_id):
             grupos_participante = GrupoHasUsuarioDAO().buscarGruposParticipante(usuario_id)
             
-            list_grupos_participante = []
+            print(grupos_participante)
+            print("**********************************")
             for grupo_participante in grupos_participante:
-                grupo = GrupoDAO().buscarGrupoPorId(list_grupos_participante[-1]["grupo_id"])
-                list_grupos_participante[-1]["nome"] = grupo["nome"]
+                print(grupo_participante)
+                grupo = GrupoDAO().buscarGrupoPorId(grupo_participante["grupo_id"])[0]
+
+                grupo_participante["nome"] = grupo["nome"]
             
-            return list_grupos_participante
+            return grupos_participante
 
 
 

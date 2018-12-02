@@ -50,20 +50,27 @@ def entrarGrupo():
     GrupoHasUsuarioController().entrarGrupo(dados["usuario_id"], dados["grupo_id"], dados["eh_administrador"])
     response =  Response(json.dumps(dados), status=200, mimetype='application/json')
     return response
-    
+
+@app.route('/buscar/tarefas/todos/dono', methods = ["GET"])
+def buscarTodasTarefasDono():
+    dados = getParamsFromRequest(request)
+    tarefas = TarefaController().buscarTodasTarefasDono(dados["dono_id"])
+    response =  Response(json.dumps(tarefas), status=200, mimetype='application/json')
+    return response
+
 
 @app.route('/buscar/tarefas/dono', methods = ["GET"])
 def buscarTarefaDono():
-    dados = getJsonFromRequest(request)
+    dados = getParamsFromRequest(request)
     tarefas = TarefaController().buscarTarefasDono(dados["dono_id"])
     response =  Response(json.dumps(tarefas), status=200, mimetype='application/json')
     return response
 
 @app.route('/buscar/tarefas/data', methods = ["GET"])
 def buscarTarefasData():
-    dados = getJsonFromRequest(request)
+    dados = getParamsFromRequest(request)
     print(dados)
-    tarefas = TarefaController().buscarTarefasData(dados["dono_id"], dados["data"])
+    tarefas = TarefaController().buscarTarefasData(dados["dono_id"])
     print(tarefas)
     response =  Response(json.dumps(tarefas), status=200, mimetype='application/json')
     return response
@@ -71,7 +78,7 @@ def buscarTarefasData():
 
 @app.route('/buscar/grupos/id_ou_user', methods = ["GET"])
 def buscarGrupos():
-    dados = getJsonFromRequest(request)
+    dados = getParamsFromRequest(request)
     grupos = GrupoController().buscarGrupos(dados["grupo_id"], dados["usuario_id"])
     response =  Response(json.dumps(grupos), status=200, mimetype='application/json')
     return response
@@ -94,7 +101,7 @@ def sairGrupo():
 
 @app.route('/buscar/grupos/participante', methods = ["GET"])
 def buscarGruposParticipante():
-    dados = getJsonFromRequest(request)
+    dados = getParamsFromRequest(request)
     grupos_participante = GrupoHasUsuarioController().buscarGruposParticipante(dados["usuario_id"])
     response = Response(json.dumps(grupos_participante), status=200, mimetype='application/json')
     return response
@@ -107,10 +114,14 @@ def pingMaster():
     return response
 
 
+def getParamsFromRequest(request):
+    dados = request.args.to_dict()
+    return dados
+
 def getJsonFromRequest(request):
     dados = request.get_json()
-    json_acceptable_string = dados.replace("'", "\"")
-    dados = json.loads(json_acceptable_string)
+    # json_acceptable_string = dados.replace("'", "\"")
+    # dados = json.loads(json_acceptable_string)
     return dados
 
 def getMyIp():

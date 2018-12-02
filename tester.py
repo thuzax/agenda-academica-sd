@@ -31,7 +31,7 @@ def insereUsuario():
     query_adicionar_usuario["senha"] = input("Digite a senha do usuario: ")
     print(query_adicionar_usuario)
 
-    result_adicionar_usuario = requests.post(route_adicionar_usuario, json = json.dumps(query_adicionar_usuario))
+    result_adicionar_usuario = requests.post(route_adicionar_usuario, json = query_adicionar_usuario)
     body_usuario = result_adicionar_usuario.content
     response_dict_usuario = json.loads(body_usuario.decode("utf-8"))
 
@@ -43,7 +43,7 @@ def insereGrupo():
     query_adicionar_grupo["nome"] = input("Digite o nome do grupo: ")
     print(query_adicionar_grupo)
 
-    result_adicionar_grupo = requests.post(route_adicionar_grupo, json = json.dumps(query_adicionar_grupo))
+    result_adicionar_grupo = requests.post(route_adicionar_grupo, json = query_adicionar_grupo)
     body_grupo = result_adicionar_grupo.content
     response_dict_grupo = json.loads(body_grupo.decode("utf-8"))
     
@@ -60,7 +60,7 @@ def insereTarefa():
     query_adicionar_tarefa["dono_id"] = input("Digite o id do dono da tarefa: ")
     print(query_adicionar_tarefa)
 
-    result_adicionar_tarefa = requests.post(route_adicionar_tarefa, json = json.dumps(query_adicionar_tarefa))
+    result_adicionar_tarefa = requests.post(route_adicionar_tarefa, json = query_adicionar_tarefa)
     body_tarefa = result_adicionar_tarefa.content
     response_dict_tarefa = json.loads(body_tarefa.decode("utf-8"))
     
@@ -75,7 +75,7 @@ def entraGrupo():
     query_entrar_grupo["eh_administrador"] = 1 if input(texto) == 's' else 0
     print(query_entrar_grupo)
 
-    result_entrar_grupo = requests.post(route_entrar_grupo, json = json.dumps(query_entrar_grupo))
+    result_entrar_grupo = requests.post(route_entrar_grupo, json = query_entrar_grupo)
     body_entrar_grupo = result_entrar_grupo.content
     response_dict_entrar_grupo = json.loads(body_entrar_grupo.decode("utf-8"))
 
@@ -86,7 +86,7 @@ def buscaTarefasPorId():
     query_busca_tarefas_dono["dono_id"] = input("Digite o id do dono das tarefas: ")
     print(query_busca_tarefas_dono)
 
-    result_busca_tarefas_dono = requests.get(route_buscar_tarefas_dono, json = json.dumps(query_busca_tarefas_dono))
+    result_busca_tarefas_dono = requests.get(route_buscar_tarefas_dono, params = query_busca_tarefas_dono)
     body_busca_tarefas_dono = result_busca_tarefas_dono.content
     response_dict_busca_tarefas_dono = json.loads(body_busca_tarefas_dono.decode("utf-8"))
 
@@ -98,7 +98,7 @@ def buscaTarefasData():
     query_busca_tarefas_data["data"] = input("Digite a data das tarefas: ")
     print(query_busca_tarefas_data)
 
-    result_busca_tarefas_data = requests.get(route_buscar_tarefas_data, json = json.dumps(query_busca_tarefas_data))
+    result_busca_tarefas_data = requests.get(route_buscar_tarefas_data, params = query_busca_tarefas_data)
     body_busca_tarefas_data = result_busca_tarefas_data.content
     response_dict_busca_tarefas_data = json.loads(body_busca_tarefas_data.decode("utf-8"))
 
@@ -112,7 +112,7 @@ def buscaGrupos():
     query_busca_grupos["usuario_id"] = input(texto)
     print(query_busca_grupos)
 
-    result_busca_grupos = requests.get(route_buscar_grupos_id_ou_user, json = json.dumps(query_busca_grupos))
+    result_busca_grupos = requests.get(route_buscar_grupos_id_ou_user, params = query_busca_grupos)
     body_busca_grupos = result_busca_grupos.content
     response_dict_busca_grupos = json.loads(body_busca_grupos.decode("utf-8"))
 
@@ -124,7 +124,7 @@ def buscaGruposParticipante():
     query_busca_grupos_participante["usuario_id"] = input(texto)
     print(query_busca_grupos_participante)
 
-    result_busca_grupos_participante = requests.get(route_buscar_grupos_participante, json = json.dumps(query_busca_grupos_participante))
+    result_busca_grupos_participante = requests.get(route_buscar_grupos_participante, params = query_busca_grupos_participante)
     body_busca_grupos_participante = result_busca_grupos_participante.content
     response_dict_busca_grupos_participante = json.loads(body_busca_grupos_participante.decode("utf-8"))
 
@@ -139,7 +139,7 @@ def login():
     query_login["senha"] = input(texto)
     print(query_login)
 
-    result_login = requests.post(route_login, json = json.dumps(query_login))
+    result_login = requests.post(route_login, json = query_login)
     body_login = result_login.content
     response_dict_login = json.loads(body_login.decode("utf-8"))
 
@@ -153,7 +153,7 @@ def sairGrupo():
     query_sair_grupo["grupo_id"] = input(texto)
     print(query_sair_grupo)
 
-    result_sair_grupo = requests.post(route_sair_grupo, json = json.dumps(query_sair_grupo))
+    result_sair_grupo = requests.post(route_sair_grupo, json = query_sair_grupo)
     body_sair_grupo = result_sair_grupo.content
     response_dict_sair_grupo = json.loads(body_sair_grupo.decode("utf-8"))
 

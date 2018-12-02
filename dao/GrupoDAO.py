@@ -62,6 +62,8 @@ class GrupoDAO:
             cursor.close()
             conexao.close()
 
+            print("++++++++++++++++++++++++++")
+            print(grupos)
             return grupos
 
         
