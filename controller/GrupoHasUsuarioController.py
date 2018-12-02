@@ -39,12 +39,8 @@ class GrupoHasUsuarioController:
             
             list_grupos_participante = []
             for grupo_participante in grupos_participante:
-                list_grupos_participante.append({})
-                list_grupos_participante[-1]["eh_administrador"] = grupo_participante[0]
-                list_grupos_participante[-1]["grupo_id"] = grupo_participante[1]
-                list_grupos_participante[-1]["usuario_id"] = grupo_participante[2]
                 grupo = GrupoDAO().buscarGrupoPorId(list_grupos_participante[-1]["grupo_id"])
-                list_grupos_participante[-1]["nome"] = grupo[0][0]
+                list_grupos_participante[-1]["nome"] = grupo["nome"]
             
             return list_grupos_participante
 

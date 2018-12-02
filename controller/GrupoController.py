@@ -26,17 +26,14 @@ class GrupoController:
             else:
                 grupos = GrupoDAO().buscarGrupoPorId(grupo_id)
 
-            list_grupos = []
-            for grupo in grupos:
-                list_grupos.append({})
-                list_grupos[-1]["nome"] = grupo[0]
-                list_grupos[-1]["dono_id"] = grupo[1]
-                list_grupos[-1]["participa"] = ""
-                list_grupos[-1]["eh_administrador"] = ""
-
+            for dict_grupo in grupos:
+                dict_grupo["participa"] = ""
+                dict_grupo["eh_administrador"] = ""
             print(usuario_id)
             if(usuario_id != ""):
-                for dict_grupo in list_grupos:
+                for dict_grupo in grupos:
+                    dict_grupo["participa"] = ""
+                    dict_grupo["eh_administrador"] = ""
                     if(GrupoHasUsuarioController().participaGrupo(usuario_id, dict_grupo["dono_id"])):
                         dict_grupo["participa"] = "true"
                         if(GrupoHasUsuarioController().ehAdministrador(usuario_id, dict_grupo["dono_id"])):
@@ -48,7 +45,7 @@ class GrupoController:
                         dict_grupo["participa"] = "false"
                         
 
-            return list_grupos
+            return grupos
             
 
     def __init__(self):

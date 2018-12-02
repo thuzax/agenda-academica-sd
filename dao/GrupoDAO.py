@@ -36,7 +36,8 @@ class GrupoDAO:
 
             cursor.execute(busca_grupos)
             grupos = cursor.fetchall()
-            
+            grupos = self.__converteParaLista(grupos)
+
             conexao.commit()
             cursor.close()
             conexao.close()
@@ -55,12 +56,22 @@ class GrupoDAO:
 
             cursor.execute(busca_grupos)
             grupos = cursor.fetchall()
-            
+            grupos = self.__converteParaLista(grupos)
+
             conexao.commit()
             cursor.close()
             conexao.close()
 
             return grupos
+
+        
+        def __converteParaLista(self, grupos):
+            list_grupos = []
+            for grupo in grupos:
+                list_grupos.append({})
+                list_grupos[-1]["nome"] = grupo[0]
+                list_grupos[-1]["dono_id"] = grupo[1]
+            return list_grupos
 
     # Singleton
     def __init__(self):

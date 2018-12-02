@@ -73,12 +73,22 @@ class GrupoHasUsuarioDAO:
             cursor.execute(busca_grupos)
             grupos = cursor.fetchall()
 
+            grupos = self.__converteParaLista(grupos)
+
             conexao.commit()
             cursor.close()
             conexao.close()
 
             return grupos
 
+        def __converteParaLista(self, grupos_participante):
+            list_grupos_participante = []
+            for grupo_participante in grupos_participante:
+                list_grupos_participante.append({})
+                list_grupos_participante[-1]["eh_administrador"] = grupo_participante[0]
+                list_grupos_participante[-1]["grupo_id"] = grupo_participante[1]
+                list_grupos_participante[-1]["usuario_id"] = grupo_participante[2]
+            return list_grupos_participante
     # Singleton
     def __init__(self):
         if(self.instancia == None):
