@@ -22,7 +22,7 @@ class TarefaDAO:
 
             print("--------------------------------")
 
-        def buscaTarefasDono(self, dono_id):
+        def buscarTarefasDono(self, dono_id):
             conexao = mysql.connector.connect(user = "thuza", password = "agenda", host = "127.0.0.1", database = "agenda-academica")
 
 
@@ -44,7 +44,27 @@ class TarefaDAO:
             
             return tarefas
 
-        
+        def buscarTarefasData(self, dono_id, data):
+            conexao = mysql.connector.connect(user = "thuza", password = "agenda", host = "127.0.0.1", database = "agenda-academica")
+
+
+            cursor = conexao.cursor()
+
+            busca_tarefas = ("SELECT id, DATE_FORMAT(data, '%Y-%m-%d') AS data, DATE_FORMAT(horario, '%H:%i:%s') AS horario, "
+                             "titulo, descricao, dono_id "
+                             "FROM Tarefa t "
+                             "WHERE t.dono_id = '" + str(dono_id) + "' AND data = '" + str(data) + "'"
+                             ";")
+            print(busca_tarefas)
+
+            cursor.execute(busca_tarefas)
+            tarefas = cursor.fetchall()
+            
+            conexao.commit()
+            cursor.close()
+            conexao.close()
+            
+            return tarefas
 
     # Singleton
     def __init__(self):

@@ -23,9 +23,7 @@ gerenciador = Gerenciador()
 
 @app.route('/adicionar/usuario',methods = ['POST'])
 def adicionarUsuario():
-    dados = request.get_json()
-    json_acceptable_string = dados.replace("'", "\"")
-    dados = json.loads(json_acceptable_string)
+    dados = getJsonFromRequest(request)
     usuario_id = UsuarioController().adicionarUsuario(dados["nome"], dados["login"], dados["senha"])
     response = Response(json.dumps({"usuario_id" : usuario_id}), status=200, mimetype='application/json')
     return response
@@ -33,57 +31,53 @@ def adicionarUsuario():
     
 @app.route('/adicionar/grupo',methods = ['POST'])
 def adicionarGrupo():
-    dados = request.get_json()
-    json_acceptable_string = dados.replace("'", "\"")
-    dados = json.loads(json_acceptable_string)
+    dados = getJsonFromRequest(request)
     GrupoController().adicionarGrupo(dados["nome"])
     response = Response(json.dumps(dados), status=200, mimetype='application/json')
     return response
 
 @app.route('/adicionar/tarefa',methods = ['POST'])
 def adicionarTarefa():
-    dados = request.get_json()
-    json_acceptable_string = dados.replace("'", "\"")
-    dados = json.loads(json_acceptable_string)
+    dados = getJsonFromRequest(request)
     TarefaController().adicionarTarefa(dados["data"], dados["horario"], dados["titulo"], dados["descricao"], dados["dono_id"])
     response = Response(json.dumps(dados), status=200, mimetype='application/json')
     return response
 
 @app.route('/entrar_grupo', methods = ["POST"])
 def entrarGrupo():
-    dados = request.get_json()
-    json_acceptable_string = dados.replace("'", "\"")
-    dados = json.loads(json_acceptable_string)
-    print(dados["usuario_id"], dados["grupo_id"], dados["eh_administrador"])
+    dados = getJsonFromRequest(request)
     GrupoHasUsuarioController().entrarGrupo(dados["usuario_id"], dados["grupo_id"], dados["eh_administrador"])
     response =  Response(json.dumps(dados), status=200, mimetype='application/json')
     return response
     
 
-@app.route('/buscar/tarefas_dono', methods = ["GET"])
-def buscaTarefaDono():
-    print("EU")
-    dados = request.get_json()
-    json_acceptable_string = dados.replace("'", "\"")
-    dados = json.loads(json_acceptable_string)
-    tarefas = TarefaController().buscaTarefasDono(dados["dono_id"])
+@app.route('/buscar/tarefas/dono', methods = ["GET"])
+def buscarTarefaDono():
+    dados = getJsonFromRequest(request)
+    tarefas = TarefaController().buscarTarefasDono(dados["dono_id"])
     response =  Response(json.dumps(tarefas), status=200, mimetype='application/json')
     return response
 
+@app.route('/buscar/tarefas/data', methods = ["GET"])
+def buscarTarefasData():
+    dados = getJsonFromRequest(request)
+    print(dados)
+    tarefas = TarefaController().buscarTarefasData(dados["dono_id"], dados["data"])
+    print(tarefas)
+    response =  Response(json.dumps(tarefas), status=200, mimetype='application/json')
+    return response
+
+
 @app.route('/buscar/grupos/id_ou_user', methods = ["GET"])
 def buscarGrupos():
-    dados = request.get_json()
-    json_acceptable_string = dados.replace("'", "\"")
-    dados = json.loads(json_acceptable_string)
+    dados = getJsonFromRequest(request)
     grupos = GrupoController().buscarGrupos(dados["grupo_id"], dados["usuario_id"])
     response =  Response(json.dumps(grupos), status=200, mimetype='application/json')
     return response
 
 @app.route('/login', methods = ["POST"])
 def login():
-    dados = request.get_json()
-    json_acceptable_string = dados.replace("'", "\"")
-    dados = json.loads(json_acceptable_string)
+    dados = getJsonFromRequest(request)
     usuario_id = UsuarioController().login(dados["login"], dados["senha"])
     response = Response(json.dumps({"usuario_id" : usuario_id}), status=200, mimetype='application/json')
     return response
@@ -91,9 +85,7 @@ def login():
 
 @app.route('/sair_grupo', methods = ["POST"])
 def sairGrupo():
-    dados = request.get_json()
-    json_acceptable_string = dados.replace("'", "\"")
-    dados = json.loads(json_acceptable_string)
+    dados = getJsonFromRequest(request)
     GrupoHasUsuarioController().sair(dados["usuario_id"], dados["grupo_id"])
     response = Response(json.dumps({"mensagem" : "ok"}), status=200, mimetype='application/json')
     return response
@@ -101,18 +93,24 @@ def sairGrupo():
 
 @app.route('/buscar/grupos/participante', methods = ["GET"])
 def buscarGruposParticipante():
-    dados = request.get_json()
-    json_acceptable_string = dados.replace("'", "\"")
-    dados = json.loads(json_acceptable_string)
-    print(dados)
+    dados = getJsonFromRequest(request)
     grupos_participante = GrupoHasUsuarioController().buscarGruposParticipante(dados["usuario_id"])
     response = Response(json.dumps(grupos_participante), status=200, mimetype='application/json')
     return response
+
+
 
 @app.route('/ping_master', methods = ["GET"])
 def pingMaster():
     response =  Response(json.dumps(master_ip), status=200, mimetype='application/json')
     return response
+
+
+def getJsonFromRequest(request):
+    dados = request.get_json()
+    json_acceptable_string = dados.replace("'", "\"")
+    dados = json.loads(json_acceptable_string)
+    return dados
 
 def getMyIp():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

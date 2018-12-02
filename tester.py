@@ -13,7 +13,10 @@ route_sair_grupo = route + "sair_grupo"
 
 
 route_buscar = route + "buscar/"
-route_buscar_tarefas_dono = route_buscar + "tarefas_dono"
+route_buscar_tarefas = route_buscar + "tarefas"
+route_buscar_tarefas_dono = route_buscar_tarefas + "/dono"
+route_buscar_tarefas_data = route_buscar_tarefas + "/data"
+
 route_buscar_grupos = route_buscar + "grupos/"
 route_buscar_grupos_id_ou_user = route_buscar_grupos + "id_ou_user"
 route_buscar_grupos_participante = route_buscar_grupos + "participante"
@@ -89,6 +92,18 @@ def buscaTarefasPorId():
 
     print(response_dict_busca_tarefas_dono)
 
+def buscaTarefasData():
+    query_busca_tarefas_data = {}
+    query_busca_tarefas_data["dono_id"] = input("Digite o id do dono das tarefas: ")
+    query_busca_tarefas_data["data"] = input("Digite a data das tarefas: ")
+    print(query_busca_tarefas_data)
+
+    result_busca_tarefas_data = requests.get(route_buscar_tarefas_data, json = json.dumps(query_busca_tarefas_data))
+    body_busca_tarefas_data = result_busca_tarefas_data.content
+    response_dict_busca_tarefas_data = json.loads(body_busca_tarefas_data.decode("utf-8"))
+
+    print(response_dict_busca_tarefas_data)
+
 def buscaGrupos():
     query_busca_grupos = {}
     texto = "Digite o id do grupo (por padrao busca todos os grupo): "
@@ -156,7 +171,8 @@ def mostraOpcoes():
     texto += "6 - Busca grupos (inclui informacao de participacao e se e adm)" + "\n"
     texto += "7 - Fazer login" + "\n"
     texto += "8 - Sair grupo" + "\n"
-    texto += "9 - Buscar Grupos que usuario participa" + "\n"
+    texto += "9 - Buscar grupos que usuario participa" + "\n"
+    texto += "10 - Buscar tarefas por data" + "\n"
     texto += "0 - Sair" + "\n"
     texto += "----------------------------------------" + "\n"
     texto += "Opcao: "
@@ -192,6 +208,9 @@ def fazOpcao(x):
         return
     if(x == "9"):
         buscaGruposParticipante()
+        return
+    if(x == "10"):
+        buscaTarefasData()
         return
     print("ERRO")
     return
