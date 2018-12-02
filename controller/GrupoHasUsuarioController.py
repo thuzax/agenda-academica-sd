@@ -30,6 +30,9 @@ class GrupoHasUsuarioController:
             return False
 
 
+        def sair(self, usuario_id, grupo_id):
+            GrupoHasUsuarioDAO().sair(usuario_id, grupo_id)
+
 
     def __init__(self):
         if(self.instancia == None):

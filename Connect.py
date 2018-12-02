@@ -89,6 +89,16 @@ def login():
     return response
 
 
+@app.route('/sair_grupo', methods = ["POST"])
+def sairGrupo():
+    dados = request.get_json()
+    json_acceptable_string = dados.replace("'", "\"")
+    dados = json.loads(json_acceptable_string)
+    GrupoHasUsuarioController().sair(dados["usuario_id"], dados["grupo_id"])
+    response = Response(json.dumps({"mensagem" : "ok"}), status=200, mimetype='application/json')
+    return response
+
+
 
 
 @app.route('/ping_master', methods = ["GET"])

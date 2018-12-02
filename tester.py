@@ -9,6 +9,8 @@ route_adicionar_grupo = route_adicionar + "grupo"
 route_adicionar_tarefa = route_adicionar + "tarefa"
 
 route_entrar_grupo = route + "entrar_grupo"
+route_sair_grupo = route + "sair_grupo"
+
 
 route_busca = route + "buscar/"
 route_busca_tarefas_dono = route_busca + "tarefas_dono"
@@ -113,6 +115,20 @@ def login():
 
     print(response_dict_login)
 
+def sairGrupo():
+    query_sair_grupo = {}
+    texto = "Digite o id do usuario: "
+    query_sair_grupo["usuario_id"] = input(texto)
+    texto = "Digite o id do grupo: "
+    query_sair_grupo["grupo_id"] = input(texto)
+    print(query_sair_grupo)
+
+    result_sair_grupo = requests.post(route_sair_grupo, json = json.dumps(query_sair_grupo))
+    body_sair_grupo = result_sair_grupo.content
+    response_dict_sair_grupo = json.loads(body_sair_grupo.decode("utf-8"))
+
+    print(response_dict_sair_grupo)
+
 def mostraOpcoes():
     texto = ""
     texto += "----------------------------------------" + "\n"
@@ -120,10 +136,11 @@ def mostraOpcoes():
     texto += "1 - Insere usuario" + "\n"
     texto += "2 - Insere grupo" + "\n"
     texto += "3 - Insere tarefa" + "\n"
-    texto += "4 - Insere entrar grupo" + "\n"
+    texto += "4 - Entrar grupo" + "\n"
     texto += "5 - Busca tarefas usando ID do dono" + "\n"
     texto += "6 - Busca grupos (inclui informacao de participacao e se e adm)" + "\n"
     texto += "7 - Fazer Login" + "\n"
+    texto += "8 - Sair Grupo" + "\n"
     texto += "0 - Sair" + "\n"
     texto += "----------------------------------------" + "\n"
     texto += "Opcao: "
@@ -153,6 +170,9 @@ def fazOpcao(x):
         return
     if(x == "7"):
         login()
+        return
+    if(x == "8"):
+        sairGrupo()
         return
     print("ERRO")
     return

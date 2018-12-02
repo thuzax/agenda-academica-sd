@@ -43,6 +43,23 @@ class GrupoHasUsuarioDAO:
 
             return relacoes
 
+        def sair(self, usuario_id, grupo_id):
+            conexao = mysql.connector.connect(user = "thuza", password = "agenda", host = "127.0.0.1", database = "agenda-academica")
+            cursor = conexao.cursor()
+
+            delete_relacao = ("DELETE FROM Grupo_has_Usuario "
+                             "WHERE usuario_id = '" + str(usuario_id) + "' AND grupo_id = '" + str(grupo_id) + "'"
+                             ";")
+
+            print(delete_relacao)
+
+            cursor.execute(delete_relacao)
+            # relacoes = cursor.fetchall()
+
+            conexao.commit()
+            cursor.close()
+            conexao.close()
+
     # Singleton
     def __init__(self):
         if(self.instancia == None):
