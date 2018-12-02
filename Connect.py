@@ -2,6 +2,7 @@ import socket
 import requests
 import sys
 import json
+import os
 from flask import Flask, redirect, url_for, request, Response, jsonify
 
 
@@ -139,7 +140,7 @@ def main(gereciador):
     if(len(sys.argv) < 2):
         print("Deve ser passado por parametro o id do servidor")
         return
-    id_maquina = sys.argv[1]
+    gerenciador.id_maquina = sys.argv[1]
     gerenciador.my_ip = getMyIp()
     print("meu IP: ", gerenciador.my_ip)
     with open("ip-config.txt", "r") as arquivo:
@@ -154,12 +155,50 @@ def main(gereciador):
     print("meu ip: ", gerenciador.my_ip)
     print("todos: ", gerenciador.ips)
 
+    texto_novo = ""
     with open("banco-de-dados/mysqld.cnf", "r") as arquivo:
-        saida = arquivo.read()
+        entrada = arquivo.read().strip().splitlines()
+        list_novo = []
+        for linha in entrada:
+            list_linha = linha.strip().split()
+            list_nova_linha = []
+            
+            i = 0
+            while(i < len(list_linha)):
+                if(list_linha[i] == "bind-address"):
+                    if(list_linha[i + 1] == "="):
+                        if(list_linha[i + 2] == "127.0.0.1"):
+                            list_nova_linha.append(list_linha[i])
+                            list_nova_linha.append(list_linha[i + 1])
+                            list_nova_linha.append("0.0.0.0")
+                            i += 3
+                            continue
+                list_nova_linha.append(list_linha[i])
+                i += 1
+            
+            frase = ""
+            for palavra in list_nova_linha:
+                frase += palavra + " "
+            
+            list_novo.append(frase)
+
+        for linha in list_novo:
+            texto_novo += linha + "\n"
     
-    saida += id_maquina
+    texto_novo += "server-id = " + str(gerenciador.id_maquina) + "\n"
+    texto_novo += "log_bin = /var/log/mysql/mysql-bin.log" + "\n"
+    texto_novo += "log_bin_index =/var/log/mysql/mysql-bin.log.index" + "\n"
+    texto_novo += "relay_log = /var/log/mysql/mysql-relay-bin" + "\n"
+    texto_novo += "relay_log_index = /var/log/mysql/mysql-relay-bin.index" + "\n"
+
+    print(texto_novo)
+    # arquivo_teste = open("arquivo-teste.txt", "w")
+    # arquivo_teste.write(texto_novo)
+
     with open("/etc/mysql/mysql.conf.d/mysqld.cnf", "w") as arquivo:
-        pass
+        arquivo.write(texto_novo)
+
+    os.system("sudo service mysql restart ")
 
     app.run(debug = True, host = "0.0.0.0")
 

@@ -3,3 +3,4 @@ class Gerenciador:
         self.ips = None
         self.my_ip = ""
         self.master_ip = None
+        self.id_maquina = None
