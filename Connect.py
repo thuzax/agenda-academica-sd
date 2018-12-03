@@ -112,7 +112,7 @@ def buscarGruposParticipante():
 
 @app.route('/ping_master', methods = ["GET"])
 def pingMaster():
-    response =  Response(json.dumps(master_ip), status=200, mimetype='application/json')
+    response =  Response(json.dumps(gerenciador.master_ip), status=200, mimetype='application/json')
     return response
 
 
@@ -122,8 +122,6 @@ def getParamsFromRequest(request):
 
 def getJsonFromRequest(request):
     dados = request.get_json()
-    # json_acceptable_string = dados.replace("'", "\"")
-    # dados = json.loads(json_acceptable_string)
     return dados
 
 def getMyIp():
@@ -150,14 +148,28 @@ def getMasterIp(ips, my_ip):
     return my_ip
 
 
-def createMySQLConnection(gerenciador):
-    conexao = mysql.connector.connect(user = "thuza", password = "agenda", host = "127.0.0.1", database = "agenda-academica")
-    cursor = conexao.cursor()
-    cursor.execute("show master status;")
-    print(cursor.fetchall())
-    conexao.commit()
-    cursor.close()
-    conexao.close()
+# def createMySQLConnection(gerenciador):
+    # print("------------------------------")
+    # conexao = mysql.connector.connect(user = "thuza", password = "agenda", host = "127.0.0.1")
+    # cursor = conexao.cursor()
+    # cursor.execute("set global server_id = " + str(gerenciador.id_maquina + ";"))
+    # cursor.execute("set global server_id = " + str(gerenciador.id_maquina + ";"))
+    # print(cursor.fetchall())
+    # conexao.commit()
+    # cursor.execute("select @@server_id")
+    # print(cursor.fetchall())
+    # cursor.execute("drop schema if exists `agenda-academica`;")
+    # conexao.commit()
+    # cursor.execute("create schema if not exists `agenda-academica`;")
+    # conexao.commit()
+    # cursor.close()
+    # conexao.close()
+    # print("------------------------------")
+
+    
+
+    # comando = "mysqldump -h 192.168.1.3 -u thuza -p agenda-academica | mysql -h 127.0.0.1 -u thuza -p agenda-academica"
+    # os.system(comando)
     
 
 def main(gereciador):
@@ -179,52 +191,48 @@ def main(gereciador):
     print("meu ip: ", gerenciador.my_ip)
     print("todos: ", gerenciador.ips)
 
-    texto_novo = ""
-    with open("banco-de-dados/mysqld.cnf", "r") as arquivo:
-        entrada = arquivo.read().strip().splitlines()
-        list_novo = []
-        for linha in entrada:
-            list_linha = linha.strip().split()
-            list_nova_linha = []
+    # texto_novo = ""
+    # with open("banco-de-dados/mysqld.cnf", "r") as arquivo:
+    #     entrada = arquivo.read().strip().splitlines()
+    #     list_novo = []
+    #     for linha in entrada:
+    #         list_linha = linha.strip().split()
+    #         list_nova_linha = []
             
-            i = 0
-            while(i < len(list_linha)):
-                if(list_linha[i] == "bind-address"):
-                    if(list_linha[i + 1] == "="):
-                        if(list_linha[i + 2] == "127.0.0.1"):
-                            list_nova_linha.append(list_linha[i])
-                            list_nova_linha.append(list_linha[i + 1])
-                            list_nova_linha.append("0.0.0.0")
-                            i += 3
-                            continue
-                list_nova_linha.append(list_linha[i])
-                i += 1
+    #         i = 0
+    #         while(i < len(list_linha)):
+    #             if(list_linha[i] == "bind-address"):
+    #                 if(list_linha[i + 1] == "="):
+    #                     if(list_linha[i + 2] == "127.0.0.1"):
+    #                         list_nova_linha.append(list_linha[i])
+    #                         list_nova_linha.append(list_linha[i + 1])
+    #                         list_nova_linha.append("0.0.0.0")
+    #                         i += 3
+    #                         continue
+    #             list_nova_linha.append(list_linha[i])
+    #             i += 1
             
-            frase = ""
-            for palavra in list_nova_linha:
-                frase += palavra + " "
+    #         frase = ""
+    #         for palavra in list_nova_linha:
+    #             frase += palavra + " "
             
-            list_novo.append(frase)
+    #         list_novo.append(frase)
 
-        for linha in list_novo:
-            texto_novo += linha + "\n"
+    #     for linha in list_novo:
+    #         texto_novo += linha + "\n"
     
-    texto_novo += "server-id = " + str(gerenciador.id_maquina) + "\n"
-    texto_novo += "log_bin = /var/log/mysql/mysql-bin.log" + "\n"
-    texto_novo += "log_bin_index =/var/log/mysql/mysql-bin.log.index" + "\n"
-    texto_novo += "relay_log = /var/log/mysql/mysql-relay-bin" + "\n"
-    texto_novo += "relay_log_index = /var/log/mysql/mysql-relay-bin.index" + "\n"
+    # texto_novo += "log_bin = /var/log/mysql/mysql-bin.log" + "\n"
+    # texto_novo += "log_bin_index =/var/log/mysql/mysql-bin.log.index" + "\n"
+    # texto_novo += "relay_log = /var/log/mysql/mysql-relay-bin" + "\n"
+    # texto_novo += "relay_log_index = /var/log/mysql/mysql-relay-bin.index" + "\n"
 
-    print(texto_novo)
-    # arquivo_teste = open("arquivo-teste.txt", "w")
-    # arquivo_teste.write(texto_novo)
 
-    with open("/etc/mysql/mysql.conf.d/mysqld.cnf", "w") as arquivo:
-        arquivo.write(texto_novo)
+    # with open("/etc/mysql/mysql.conf.d/mysqld.cnf", "w") as arquivo:
+    #     arquivo.write(texto_novo)
 
-    os.system("sudo service mysql restart ")
+    # os.system("sudo service mysql restart")
 
-    createMySQLConnection(gerenciador)
+    # createMySQLConnection(gerenciador)
 
     app.run(debug = True, host = "0.0.0.0")
 
