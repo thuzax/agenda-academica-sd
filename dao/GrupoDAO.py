@@ -25,7 +25,7 @@ class GrupoDAO:
             print("------------------------------------------")
 
         def buscarGrupoPorId(self, grupo_id):
-            conexao = mysql.connector.connect(user = "thuza", password = "agenda", host = "127.0.0.1", database = "agenda-academica")
+            conexao = mysql.connector.connect(user = "root", password = "32658254", host = "127.0.0.1", database = "agenda-academica")
             cursor = conexao.cursor()
 
             busca_grupos = ("SELECT * FROM Grupo g "
@@ -46,7 +46,7 @@ class GrupoDAO:
 
 
         def buscarTodosGrupos(self):
-            conexao = mysql.connector.connect(user = "thuza", password = "agenda", host = "127.0.0.1", database = "agenda-academica")
+            conexao = mysql.connector.connect(user = "root", password = "32658254", host = "127.0.0.1", database = "agenda-academica")
             cursor = conexao.cursor()
 
             busca_grupos = ("SELECT * FROM Grupo;"

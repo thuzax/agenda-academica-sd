@@ -25,7 +25,7 @@ class GrupoHasUsuarioDAO:
             print("------------------------------------------")
 
         def buscaRelacao(self, usuario_id, grupo_id):
-            conexao = mysql.connector.connect(user = "thuza", password = "agenda", host = "127.0.0.1", database = "agenda-academica")
+            conexao = mysql.connector.connect(user = "root", password = "32658254", host = "127.0.0.1", database = "agenda-academica")
             cursor = conexao.cursor()
 
             busca_relacao = ("SELECT * FROM Grupo_has_Usuario ghu "
@@ -44,7 +44,7 @@ class GrupoHasUsuarioDAO:
             return relacoes
 
         def sair(self, usuario_id, grupo_id):
-            conexao = mysql.connector.connect(user = "thuza", password = "agenda", host = "127.0.0.1", database = "agenda-academica")
+            conexao = mysql.connector.connect(user = "thuza", password = "agenda", host = "192.168.43.134", database = "agenda-academica")
             cursor = conexao.cursor()
 
             delete_relacao = ("DELETE FROM Grupo_has_Usuario "
@@ -61,7 +61,7 @@ class GrupoHasUsuarioDAO:
             conexao.close()
 
         def buscarGruposParticipante(self, usuario_id):
-            conexao = mysql.connector.connect(user = "thuza", password = "agenda", host = "127.0.0.1", database = "agenda-academica")
+            conexao = mysql.connector.connect(user = "root", password = "32658254", host = "127.0.0.1", database = "agenda-academica")
             cursor = conexao.cursor()
 
             busca_grupos = ("SELECT * FROM Grupo_has_Usuario ghu "

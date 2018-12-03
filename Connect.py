@@ -23,9 +23,27 @@ app = Flask(__name__)
 
 gerenciador = Gerenciador()
 
+
+def redirecionaRequisicao(route, dados):
+    gerenciador.setMasterRoute()
+    result = requests.post(route, json = dados)
+    
+    body = result.content
+    print(body)
+    response_dict = json.loads(body.decode("utf-8"))
+    print(response_dict)
+
+    
+    return response_dict
+
 @app.route('/adicionar/usuario',methods = ['POST'])
 def adicionarUsuario():
     dados = getJsonFromRequest(request)
+    if(gerenciador.master_ip != gerenciador.my_ip):
+        response_dict = redirecionaRequisicao(gerenciador.route_adicionar_usuario, dados)
+        response = Response(json.dumps({"usuario_id" : response_dict["usuario_id"]}), status=200, mimetype='application/json')
+        return response
+    
     usuario_id = UsuarioController().adicionarUsuario(dados["nome"], dados["login"], dados["senha"])
     response = Response(json.dumps({"usuario_id" : usuario_id}), status=200, mimetype='application/json')
     return response
@@ -34,6 +52,10 @@ def adicionarUsuario():
 @app.route('/adicionar/grupo',methods = ['POST'])
 def adicionarGrupo():
     dados = getJsonFromRequest(request)
+    if(gerenciador.master_ip != gerenciador.my_ip):
+        response_dict = redirecionaRequisicao(gerenciador.route_adicionar_grupo, dados)
+        response = Response(json.dumps(dados), status=200, mimetype='application/json')
+        return response
     GrupoController().adicionarGrupo(dados["nome"])
     response = Response(json.dumps(dados), status=200, mimetype='application/json')
     return response
@@ -41,6 +63,10 @@ def adicionarGrupo():
 @app.route('/adicionar/tarefa',methods = ['POST'])
 def adicionarTarefa():
     dados = getJsonFromRequest(request)
+    if(gerenciador.master_ip != gerenciador.my_ip):
+        response_dict = redirecionaRequisicao(gerenciador.route_adicionar_tarefa, dados)
+        response = Response(json.dumps(dados), status=200, mimetype='application/json')
+        return response
     t_id = TarefaController().adicionarTarefa(dados["data"], dados["horario"], dados["titulo"], dados["descricao"], dados["dono_id"])
     dados["id"] = t_id
     response = Response(json.dumps(dados), status=200, mimetype='application/json')
@@ -49,6 +75,10 @@ def adicionarTarefa():
 @app.route('/entrar_grupo', methods = ["POST"])
 def entrarGrupo():
     dados = getJsonFromRequest(request)
+    if(gerenciador.master_ip != gerenciador.my_ip):
+        response_dict = redirecionaRequisicao(gerenciador.route_entrar_grupo, dados)
+        response = Response(json.dumps(dados), status=200, mimetype='application/json')
+        return response
     GrupoHasUsuarioController().entrarGrupo(dados["usuario_id"], dados["grupo_id"], dados["eh_administrador"])
     response =  Response(json.dumps(dados), status=200, mimetype='application/json')
     return response
@@ -89,6 +119,7 @@ def buscarGrupos():
 def login():
     dados = getJsonFromRequest(request)
     usuario_id = UsuarioController().login(dados["login"], dados["senha"])
+    print("usuario_id")
     response = Response(json.dumps({"usuario_id" : usuario_id}), status=200, mimetype='application/json')
     return response
 
@@ -96,6 +127,10 @@ def login():
 @app.route('/sair_grupo', methods = ["POST"])
 def sairGrupo():
     dados = getJsonFromRequest(request)
+    if(gerenciador.master_ip != gerenciador.my_ip):
+        response_dict = redirecionaRequisicao(gerenciador.route_sair_grupo, dados)
+        response = Response(json.dumps({"mensagem" : "ok"}), status=200, mimetype='application/json')
+        return response
     GrupoHasUsuarioController().sair(dados["usuario_id"], dados["grupo_id"])
     response = Response(json.dumps({"mensagem" : "ok"}), status=200, mimetype='application/json')
     return response
@@ -126,7 +161,10 @@ def getJsonFromRequest(request):
 
 def getMyIp():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.connect(("8.8.8.8", 80))
+    try:
+        ip = s.connect(("8.8.8.8", 80))
+    except:
+        ip = "192.168.43.82"
     ip = s.getsockname()[0]
     s.close()
     return ip

@@ -12,6 +12,9 @@ class UsuarioController:
     class __UsuarioController:
         def adicionarUsuario(self, nome, login, senha):
                 dono_usuario = DonoController().adicionaDono()
+                
+                if(len(UsuarioDAO().buscaLogin(login)) > 0):
+                    return -1
 
                 usuario = Usuario(dono_usuario.getId(), nome, login, senha)
                 UsuarioDAO().adicionarUsuario(usuario)
