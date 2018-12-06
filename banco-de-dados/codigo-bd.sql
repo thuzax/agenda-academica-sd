@@ -68,7 +68,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `agenda-academica`.`Usuario` (
   `nome` VARCHAR(45) NOT NULL,
   `login` VARCHAR(45) NOT NULL UNIQUE,
-  `senha` VARCHAR(45) NOT NULL,
+  `senha` VARCHAR(200) NOT NULL,
   `dono_id` INT NOT NULL,
   PRIMARY KEY (`dono_id`),
   INDEX `fk_Usuario_Dono1_idx` (`dono_id` ASC),

@@ -7,7 +7,7 @@ class GrupoDAO:
         def adicionarGrupo(self, grupo):
             print("--------------------------------")
             
-            conexao = mysql.connector.connect(user = "thuza", password = "agenda", host = "127.0.0.1", database = "agenda-academica")
+            conexao = mysql.connector.connect(user = "root", password = "32658254", host = "127.0.0.1", database = "agenda-academica")
             cursor = conexao.cursor()
 
             insere_grupo = ("INSERT INTO Grupo (dono_id, nome) "

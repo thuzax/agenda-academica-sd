@@ -163,9 +163,9 @@ def getMyIp():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
         ip = s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
     except:
-        ip = "192.168.43.82"
-    ip = s.getsockname()[0]
+        ip = "192.168.43.134"
     s.close()
     return ip
 
@@ -192,7 +192,7 @@ def getMasterIp(ips, my_ip):
     # cursor = conexao.cursor()
     # cursor.execute("set global server_id = " + str(gerenciador.id_maquina + ";"))
     # cursor.execute("set global server_id = " + str(gerenciador.id_maquina + ";"))
-    # print(cursor.fetchall())
+    # print(cursor.fetchall())  
     # conexao.commit()
     # cursor.execute("select @@server_id")
     # print(cursor.fetchall())
@@ -211,10 +211,6 @@ def getMasterIp(ips, my_ip):
     
 
 def main(gereciador):
-    if(len(sys.argv) < 2):
-        print("Deve ser passado por parametro o id do servidor")
-        return
-    gerenciador.id_maquina = sys.argv[1]
     gerenciador.my_ip = getMyIp()
     print("meu IP: ", gerenciador.my_ip)
     with open("ip-config.txt", "r") as arquivo:

@@ -7,7 +7,7 @@ class GrupoHasUsuarioDAO:
         def entrarGrupo(self, grupo_has_usuario):
             print("--------------------------------")
             
-            conexao = mysql.connector.connect(user = "thuza", password = "agenda", host = "127.0.0.1", database = "agenda-academica")
+            conexao = mysql.connector.connect(user = "root", password = "32658254", host = "127.0.0.1", database = "agenda-academica")
             cursor = conexao.cursor()
 
             insere_entra_grupo = ("INSERT INTO Grupo_has_Usuario (grupo_id, usuario_id, eh_admin) "
@@ -44,7 +44,7 @@ class GrupoHasUsuarioDAO:
             return relacoes
 
         def sair(self, usuario_id, grupo_id):
-            conexao = mysql.connector.connect(user = "thuza", password = "agenda", host = "192.168.43.134", database = "agenda-academica")
+            conexao = mysql.connector.connect(user = "root", password = "32658254", host = "127.0.0.1", database = "agenda-academica")
             cursor = conexao.cursor()
 
             delete_relacao = ("DELETE FROM Grupo_has_Usuario "

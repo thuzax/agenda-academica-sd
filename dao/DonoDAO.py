@@ -6,7 +6,7 @@ class DonoDAO:
     class __DonoDAO:
         def adicionarDono(self, dono):
             print("--------------------------------")
-            conexao = mysql.connector.connect(user = "thuza", password = "agenda", host = "127.0.0.1", database = "agenda-academica")
+            conexao = mysql.connector.connect(user = "root", password = "32658254", host = "127.0.0.1", database = "agenda-academica")
             cursor = conexao.cursor()
 
             insere_dono = ("INSERT INTO Dono "
